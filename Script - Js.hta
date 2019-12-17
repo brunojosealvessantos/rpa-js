@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>SCRIPT - SAP/JAVASCRIPT</title>
+    <meta charset="utf-8">
+    <HTA:APPLICATION
+        ID="oHTA"
+        APPLICATIONNAME="listas"
+        BORDER="thin"
+        BORDERSTYLE="normal"
+        CAPTION="yes"
+        CONTEXTMENU="no"
+        ICON="icone.ico"
+        INNERBORDER="no"
+        MAXIMIZEBUTTON="no"
+        MINIMIZEBUTTON="yes"
+        NAVIGABLE="yes"
+        SCROLL="no"
+        SCROLLFLAT="yes"
+        SELECTION="no"
+        SHOWINTASKBAR="no"
+        SINGLEINSTANCE="yes"
+        SYSMENU="yes"
+        VERSION="1.0"
+        WINDOWSTATE="normal"
+    />
+	
+</head>
+
+
+<body>
+
+	<form action="/pagina-processa-dados-do-form" method="post">
+		<div>
+			<label for="datai">Data Inicial:</label> 
+			<input type="text" id="datai" />
+		</div>
+		<div>
+			<label for="dataf">Data Final:</label> 
+			<input type="text" id="dataf" />
+		</div>
+	</form>
+
+
+<script type="text/javascript">
+
+    function ClickEnter(){
+
+		var dataInicial = document.getElementsById("datai").value; 
+		var dataFinal = document.getElementById("dataf").value;
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------    
+        //CONEXÃO SAP PARA JAVASCRIPT
+
+        if (typeof(application) == "undefined"){
+            sapgui      = GetObject("SAPGUI");
+            application = sapgui.GetScriptingEngine;
+        }
+    
+        if (typeof(connection) == "undefined"){
+            connection = application.children(0);
+        }
+    
+        if (typeof(session) == "undefined"){
+            session = connection.children(0);
+        }
+    
+        if (typeof(WScript) != "undefined"){
+            WScript.connectObject(session, "on");
+            WScript.connectObject(application, "on");
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------    
+        //-----------------------------------------------------------------------------------------------------------------------------------------------    
+        //CÓDIGO SCRIPT SAP
+
+        session.findById("wnd[0]").maximize();
+        session.findById("wnd[0]/tbar[0]/okcd").Text = "/NME2N";
+        session.findById("wnd[0]").sendVKey (0);
+        session.findById("wnd[0]/usr/btn%_EN_EKORG_%_APP_%-VALU_PUSH").press();
+        session.findById("wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,0]").Text = "1020";
+        session.findById("wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,1]").Text = "2020";
+        session.findById("wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,2]").Text = "0101";
+        session.findById("wnd[1]/tbar[0]/btn[8]").press();
+        session.findById("wnd[0]/usr/ctxtLISTU").Text = "BEST ALV";
+        session.findById("wnd[0]").sendVKey (0);
+        session.findById("wnd[0]/usr/ctxtS_BSART-LOW").Text = "ZSCT";
+        session.findById("wnd[0]/usr/ctxtS_BEDAT-LOW").Text = dataInicial;
+        session.findById("wnd[0]/usr/ctxtS_BEDAT-HIGH").Text = dataFinal;
+        //session.findById("wnd[0]").sendVKey (0);
+        //session.findById("wnd[0]").sendVKey (9);
+        //session.findById("wnd[1]/tbar[0]/btn[13]").press();
+        //session.findById("wnd[1]/usr/btnSOFORT_PUSH").press();
+        //session.findById("wnd[1]/tbar[0]/btn[0]").press();
+        //session.findById("wnd[1]/tbar[0]/btn[11]").press();
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------    
+        //-----------------------------------------------------------------------------------------------------------------------------------------------    
+    }
+	
+</script>
+		<button onclick="ClickEnter()">Cliqui aqui!</button>
+    </body>
+</html>
